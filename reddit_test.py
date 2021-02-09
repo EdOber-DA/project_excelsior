@@ -18,7 +18,7 @@ comment_counts = {}
 count = 0
 prev_sub_utc = 0
 
-for submission in subreddit.search(query='walmart',sort='new',time_filter='week',limit=None):
+for submission in subreddit.search(query='walmart',sort='new',time_filter='year',limit=None):
     if submission.created_utc <= (time_break - one_day):
         #takes unix timestamp and converts to datetime object 
         date = datetime.fromtimestamp(prev_sub_utc).strftime('%m/%d/%Y')
