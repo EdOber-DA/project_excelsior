@@ -23,7 +23,7 @@ for submission in subreddit.search(query='GME',sort='comments',time_filter='year
             if 'GME' in comment.body:
                 count += 1
     #takes unix timestamp and converts to datetime object so it is readable
-    date = datetime.fromtimestamp(submission.created_utc).strftime('%m/%d/%Y')
+    date = datetime.fromtimestamp(submission.created_utc).strftime('%m/%d/%Y , %H:00-%H:59 ')
     if date in comment_counts:
         comment_counts[date] += count
     else:
@@ -38,6 +38,6 @@ for k,v in comment_counts.items():
     comments.append(v) 
 #Create a dataframe from the data taken from reddit 
 df = pd.DataFrame({'Date': dates, '# of Comments': comments})
-df.to_csv('results.csv')
+df.to_csv('Data/results.csv')
 
 
