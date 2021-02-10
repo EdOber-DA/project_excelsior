@@ -13,11 +13,12 @@ comment_counts = {}
 count = 0
 comment_bodies = []
 for submission in subreddit.search(query='GME',sort='comments',time_filter='year',limit=None):
+    #unix time for Feb 3rd as 12:00 am.  We are only looking at posts from before that 
     if submission.created_utc > 1612328400:
         continue
     top_level_comments = list(submission.comments)
     for comment in top_level_comments:
-        #we are only looking at top level comments, so no comments of comments
+        #we are only looking at top level comments, so no nested comments
         if type(comment) != praw.models.MoreComments:
             if 'GME' in comment.body:
                 count += 1
@@ -35,7 +36,7 @@ comments = []
 for k,v in comment_counts.items():
     dates.append(k)
     comments.append(v) 
-
+#Create a dataframe from the data taken from reddit 
 df = pd.DataFrame({'Date': dates, '# of Comments': comments})
 df.to_csv('results.csv')
 
