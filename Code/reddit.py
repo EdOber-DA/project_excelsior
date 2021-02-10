@@ -23,7 +23,7 @@ for submission in subreddit.search(query='GME',sort='comments',time_filter='year
             if 'GME' in comment.body:
                 count += 1
     #takes unix timestamp and converts to datetime object so it is readable
-    date = datetime.fromtimestamp(submission.created_utc).strftime('%m/%d/%Y , %H:00-%H:59 ')
+    date = datetime.fromtimestamp(submission.created_utc).strftime('%m/%d/%Y %H:00')
     if date in comment_counts:
         comment_counts[date] += count
     else:
