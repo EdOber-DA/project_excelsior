@@ -10,28 +10,23 @@ reddit = praw.Reddit(
 )
 subreddit = reddit.subreddit('wallstreetbets')
 comment_counts = {}
-count = 0
-comment_bodies = []
 for submission in subreddit.search(query='GME',sort='comments',time_filter='year',limit=None):
+    print(1)
     #unix time for Feb 3rd as 12:00 am.  We are only looking at posts from before that 
     if submission.created_utc > 1612328400:
         continue
-    top_level_comments = list(submission.comments)
-    for comment in top_level_comments:
-        #we are only looking at top level comments, so no nested comments
-        if type(comment) != praw.models.MoreComments:
+    submission.comments.replace_more(limit=0)
+    for comment in submission.comments.list():
+        try:
+            print(comment.created_utc)
             if 'GME' in comment.body:
-                count += 1
-    #takes unix timestamp and converts to datetime object so it is readable
-    #think have to use comment time --
-    date = datetime.fromtimestamp(submission.created_utc).strftime('%m/%d/%Y %H:00')
-    if date in comment_counts:
-        comment_counts[date] += count
-    else:
-        comment_counts[date] = count
-    count = 0
-    comment_bodies = []
-
+                date = datetime.fromtimestamp(comment.created_utc).strftime('%m/%d/%Y %H:00')
+                if date in comment_counts:
+                    comment_counts[date] += 1
+                else:
+                    comment_counts[date] = 1
+        except:
+            pass
 dates = []
 comments = []
 for k,v in comment_counts.items():
@@ -39,6 +34,6 @@ for k,v in comment_counts.items():
     comments.append(v) 
 #Create a dataframe from the data taken from reddit 
 df = pd.DataFrame({'Date': dates, '# of Comments': comments})
-df.to_csv('Data/results.csv')
+df.to_csv('Data/comment_results.csv')
 
 
