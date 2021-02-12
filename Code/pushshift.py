@@ -14,13 +14,11 @@ while(current_time > 1598932800):
         time.sleep(0.3)
     except:
         current_time -= 720
-        print('error')
         continue
     if date in comment_counts:
         comment_counts[date] += len(res['data'])
     else:
         comment_counts[date] = len(res['data'])
-    print(len(comment_counts))
     current_time -= 720
 
 
